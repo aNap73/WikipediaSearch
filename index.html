@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fun with APIs</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+  
 </head>
 <body>
   <H1>Wikipedia api homepage!</H1>
@@ -19,6 +19,11 @@ var antWiki={
     
     this.OutDomArticles = antWiki.getWikiHtml(inSearch, OutDomArticles);
       
+  },
+  getWikiPage: function(href,callback){
+   let antWPage = '';
+
+   
   },  
   getWikiHtml: function(SearchTerm, jQueryDomElement){
   $.ajax({
