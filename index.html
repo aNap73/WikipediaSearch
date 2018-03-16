@@ -15,11 +15,10 @@
 <script>
 
 var antWiki={
-  antWords:[],  
   setHtmlSearchArticles: function(inSearch,OutDomArticles){
     
     this.OutDomArticles = antWiki.getWikiHtml(inSearch, OutDomArticles);
-    
+      
   },  
   getWikiHtml: function(SearchTerm, jQueryDomElement){
   $.ajax({
@@ -32,8 +31,7 @@ var antWiki={
       let myTitl = $('<h2 class="antWikiHeading">').text(value);
       let myArt = $('<div class="antWikiArticle">').text(jsondata[2][index]);
       mydiv.append(myTitl);
-      mydiv.append(myArt);
-      //antWiki.getAntWikiWords(mydiv);      
+      mydiv.append(myArt);     
     })
   
     jQueryDomElement.empty();    
@@ -41,7 +39,7 @@ var antWiki={
     
   });
   
-  }  
+  }
 }  
 $(document).ready(function(){
   $('#gobtn').on('click',function(){
