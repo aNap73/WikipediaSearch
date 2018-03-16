@@ -15,57 +15,12 @@
 <script>
 
 var antWiki={
-  antWords:[],
-  getAntWikiWords: function (jQueryDomElement)
-  {
-    let sWork = '';
-    this.words = [];
-  
-/*
-remove all words less than 4 characters that are not the search term.
-find the start of all search term intersection.
--->get three words left and right of all search term intersections.
-	index words by occurance,
-	build index in word constructor
-return top 5 words not in the search term.*/
-
-/*1 replace the html
-{
-'<div class="antWikiDiv">',
-'<h2>',
-'<div class="antWikiArticle">',
-'</div>'}
-'</h2>'
-with ' ';
-remove all non alpha()
-get word array
-*/
-    sWork = jQueryDomElement.innerHtml;
-    sWork = sWork.replace('<div class="antWikiDiv">', ' ');
-    sWork = sWork.replace('<div class="antWikiArticle">', ' ');
-    sWork = sWork.replace('<h2>', ' ');
-    sWork = sWork.replace('</h2>', ' ');
-    sWork = sWork.replace('</div>', ' ');
-    sWork = sWork.replace('0', ' ');
-    sWork = sWork.replace('1', ' ');
-    sWork = sWork.replace('2', ' ');
-    sWork = sWork.replace('3', ' ');
-    sWork = sWork.replace('4', ' ');
-    sWork = sWork.replace('5', ' ');
-    sWork = sWork.replace('6', ' ');
-    sWork = sWork.replace('7', ' ');
-    sWork = sWork.replace('8', ' ');
-    sWork = sWork.replace('9', ' ');
-    sWork = sWork.replace(/\W+/g,"+");
-
-
-    console.log(sWork);
-    //find (n:3) fn(remove all words < 4 length) surrounding any exact SearchTerm Match    
-    this.words[0] = 'One';
-    this.words[1] = 'Two';
-    this.words[2] = 'Three';
-    return this.words;
-  },
+  antWords:[],  
+  setHtmlSearchArticles: function(inSearch,OutDomArticles){
+    
+    this.OutDomArticles = antWiki.getWikiHtml(inSearch, OutDomArticles);
+    
+  },  
   getWikiHtml: function(SearchTerm, jQueryDomElement){
   $.ajax({
   type: "GET",
@@ -78,28 +33,24 @@ get word array
       let myArt = $('<div class="antWikiArticle">').text(jsondata[2][index]);
       mydiv.append(myTitl);
       mydiv.append(myArt);
-      antWiki.getAntWikiWords(mydiv);      
+      //antWiki.getAntWikiWords(mydiv);      
     })
   
     jQueryDomElement.empty();    
     jQueryDomElement.append(mydiv);    
     
   });
+  
   }  
 }  
 $(document).ready(function(){
   $('#gobtn').on('click',function(){
-    let jQueryDomElementWords = {};
-    let mywords = new antWiki.getWords($('#data').val(),$('#righthere'), jQueryDomElementWords);
-    console.log(mywords);
-    $('#data').val('');
+    antWiki.setHtmlSearchArticles($('#data').val(),$('#righthere'));
+     $('#data').val('');
   });
   $('#data').on('keyup',function(event){
     if(event.key==='Enter'){
-      let jQueryDomElementWords = {};    
-      let mywords = new antWiki.getWords($('#data').val(),$('#righthere'), jQueryDomElementWords);
-      
-      console.log(mywords);
+     antWiki.setHtmlSearchArticles($('#data').val(),$('#righthere'));
       $('#data').val('');
        }    
   });  
