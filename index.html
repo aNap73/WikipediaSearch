@@ -6,12 +6,24 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fun with APIs</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  
+  <style>
+    #contbar {
+      margin: 2px;
+    }
+    #myframe {
+      width:95%;
+      margin: auto;
+      min-height: 300px;
+      margin:auto;
+    }
+    
+  </style>
 </head>
 <body>
   <H1>Wikipedia api homepage!</H1>
-  <input id='data'/><button id='gobtn'>Go</button>
-  <div id="righthere"></div>
+  <div id="contbar"><input id='data'/><button id='gobtn'>Go</button></div><br>
+  <iframe id="myframe"></iframe>
+  <div id="righthere" class="right"></div>
 <script>
 
 var antWiki={
@@ -31,7 +43,8 @@ var antWiki={
 	url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',	
   dataType: 'json',  
   }).then(function(jsondata, status, jqXHR){
-    let mydiv = $('<div class="antWikiDiv">')
+    let mydiv = $('<div class="antWikiDiv right">');   
+    $('#myframe').attr('src',jsondata[3][0]);
     $.each(jsondata[1], function(index,value){
       let myTitl = $('<h2 class="antWikiHeading">').text(value);
       let myArt =  $('<div class="antWikiArticle">').text(jsondata[2][index]);
