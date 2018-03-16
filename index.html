@@ -29,9 +29,13 @@ var antWiki={
     let mydiv = $('<div class="antWikiDiv">')
     $.each(jsondata[1], function(index,value){
       let myTitl = $('<h2 class="antWikiHeading">').text(value);
-      let myArt = $('<div class="antWikiArticle">').text(jsondata[2][index]);
+      let myArt =  $('<div class="antWikiArticle">').text(jsondata[2][index]);
+      let myLink = $('<a class="antWikiLink">').attr('href',jsondata[3][index]).text(jsondata[3][index]);//.href(jsondata[3][index]).text(jsondata[3][index]);
+      console.log(jsondata);
+    
       mydiv.append(myTitl);
-      mydiv.append(myArt);     
+      mydiv.append(myArt);
+      mydiv.append(myLink);     
     })
   
     jQueryDomElement.empty();    
