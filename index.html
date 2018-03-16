@@ -4,35 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Fun with APIs</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 <body>
-  <H1>Wikipedia api search homepage!</H1>
+  <H1>Wikipedia api homepage!</H1>
   <input id='data'/><button id='gobtn'>Go</button>
   <div id="righthere"></div>
 <script>
 
 var antWiki={
-  clsWiki: function(title, article){
-    this.Title = title;
-    this.article = article; 
-  },
-  antColWikis:[],  
-  getWikiHtml: function(SearchTerm, jQueryDomElement){
+  antWords:[],
+  getAntWikiWords: function (jQueryDomElement)
+  {
+    let sWork = '';
+    this.words = [];
+  
+/*
+remove all words less than 4 characters that are not the search term.
+find the start of all search term intersection.
+-->get three words left and right of all search term intersections.
+	index words by occurance,
+	build index in word constructor
+return top 5 words not in the search term.*/
 
+/*1 replace the html
+{
+'<div class="antWikiDiv">',
+'<h2>',
+'<div class="antWikiArticle">',
+'</div>'}
+'</h2>'
+with ' ';
+remove all non alpha()
+get word array
+*/
+    sWork = jQueryDomElement.innerHtml;
+    sWork = sWork.replace('<div class="antWikiDiv">', ' ');
+    sWork = sWork.replace('<div class="antWikiArticle">', ' ');
+    sWork = sWork.replace('<h2>', ' ');
+    sWork = sWork.replace('</h2>', ' ');
+    sWork = sWork.replace('</div>', ' ');
+    sWork = sWork.replace('0', ' ');
+    sWork = sWork.replace('1', ' ');
+    sWork = sWork.replace('2', ' ');
+    sWork = sWork.replace('3', ' ');
+    sWork = sWork.replace('4', ' ');
+    sWork = sWork.replace('5', ' ');
+    sWork = sWork.replace('6', ' ');
+    sWork = sWork.replace('7', ' ');
+    sWork = sWork.replace('8', ' ');
+    sWork = sWork.replace('9', ' ');
+    sWork = sWork.replace(/\W+/g,"+");
+
+
+    console.log(sWork);
+    //find (n:3) fn(remove all words < 4 length) surrounding any exact SearchTerm Match    
+    this.words[0] = 'One';
+    this.words[1] = 'Two';
+    this.words[2] = 'Three';
+    return this.words;
+  },
+  getWikiHtml: function(SearchTerm, jQueryDomElement){
   $.ajax({
   type: "GET",
 	url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',	
   dataType: 'json',  
   }).then(function(jsondata, status, jqXHR){
-    let mydiv = $('<div>')
+    let mydiv = $('<div class="antWikiDiv">')
     $.each(jsondata[1], function(index,value){
-      let mytit = $('<h2 class="wikiHeading">').text(value);
-      let myart = $('<div class="wikiArticle">').text(jsondata[2][index]);
-      mydiv.append(mytit);
-      mydiv.append(myart);      
+      let myTitl = $('<h2 class="antWikiHeading">').text(value);
+      let myArt = $('<div class="antWikiArticle">').text(jsondata[2][index]);
+      mydiv.append(myTitl);
+      mydiv.append(myArt);
+      antWiki.getAntWikiWords(mydiv);      
     })
   
     jQueryDomElement.empty();    
@@ -43,12 +89,17 @@ var antWiki={
 }  
 $(document).ready(function(){
   $('#gobtn').on('click',function(){
-    antWiki.getWikiHtml($('#data').val(),$('#righthere'));
+    let jQueryDomElementWords = {};
+    let mywords = new antWiki.getWords($('#data').val(),$('#righthere'), jQueryDomElementWords);
+    console.log(mywords);
     $('#data').val('');
   });
   $('#data').on('keyup',function(event){
     if(event.key==='Enter'){
-      antWiki.getWikiHtml($('#data').val(),$('#righthere'));
+      let jQueryDomElementWords = {};    
+      let mywords = new antWiki.getWords($('#data').val(),$('#righthere'), jQueryDomElementWords);
+      
+      console.log(mywords);
       $('#data').val('');
        }    
   });  
