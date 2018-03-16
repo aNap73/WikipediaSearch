@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+  <H1>Wikipedia api search homepage!</H1>
+  <input id='data'/><button id='gobtn'>Go</button>
+  <div id="righthere"></div>
+<script>
+
+var antWiki={
+  clsWiki: function(title, article){
+    this.Title = title;
+    this.article = article; 
+  },
+  antColWikis:[],  
+  getWikiHtml: function(SearchTerm, jQueryDomElement){
+
+  $.ajax({
+  type: "GET",
+	url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',	
+  dataType: 'json',  
+  }).then(function(jsondata, status, jqXHR){
+    let mydiv = $('<div>')
+    $.each(jsondata[1], function(index,value){
+      let mytit = $('<h2 class="wikiHeading">').text(value);
+      let myart = $('<div class="wikiArticle">').text(jsondata[2][index]);
+      mydiv.append(mytit);
+      mydiv.append(myart);      
+    })
+  
+    jQueryDomElement.empty();    
+    jQueryDomElement.append(mydiv);    
+    
+  });
+  }  
+}  
+$(document).ready(function(){
+  $('#gobtn').on('click',function(){
+    antWiki.getWikiHtml($('#data').val(),$('#righthere'));
+    $('#data').val('');
+  });
+  $('#data').on('keyup',function(event){
+    if(event.key==='Enter'){
+      antWiki.getWikiHtml($('#data').val(),$('#righthere'));
+      $('#data').val('');
+       }    
+  });  
+}) 
+       
+  </script>  
+    
+</body>
+</html>
